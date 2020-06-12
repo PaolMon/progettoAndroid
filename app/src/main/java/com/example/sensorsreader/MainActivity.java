@@ -11,14 +11,9 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.TextView;
 
-import org.eclipse.californium.core.CoapClient;
-import org.eclipse.californium.core.coap.MediaTypeRegistry;
-import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.List;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -30,9 +25,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     TextView light;
     TextView proximity;
-    TextView otherSensors;
 
-    CoapClient client;
 
     private static boolean resume = false;
 
@@ -44,13 +37,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        client = new CoapClient("coap://192.168.1.12:5683/publish");
-
 
         light = findViewById(R.id.light);
         proximity = findViewById(R.id.proximity);
-        otherSensors = findViewById(R.id.otherSensors);
-        otherSensors.setVisibility(View.GONE);
 
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -60,12 +49,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         sensorManager.registerListener(this, lgt, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, prx, SensorManager.SENSOR_DELAY_NORMAL);
-
-        List<Sensor> mList= sensorManager.getSensorList(Sensor.TYPE_ALL);
-        for (int i = 1; i < mList.size(); i++) {
-            otherSensors.setVisibility(View.VISIBLE);
-            otherSensors.append("\nNAME: " + mList.get(i).getName() + "\nTYPE: " + mList.get(i).getStringType() + "\nVENDOR: " + mList.get(i).getVendor() + "\nVERSION: " + mList.get(i).getVersion());
-        }
 
         resume = true;
 
@@ -87,11 +70,11 @@ public class MainActivity extends Activity implements SensorEventListener {
         switch (event.sensor.getType()) {
             case Sensor.TYPE_LIGHT:
                 light.setText("light Sensor: " + event.values[0]);
-                LOGGER.info("light: "+event.values[0]);
+                SensorsValues.setTemperatureValue(event.values[0]);
                 break;
             case Sensor.TYPE_PROXIMITY:
                 proximity.setText("proximity sensor: " + event.values[0]);
-                LOGGER.info("proximity: "+event.values[0]);
+                //LOGGER.info("proximity: "+event.values[0]);
                 break;
             default:
                 break;
@@ -103,6 +86,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 
     public class Task extends AsyncTask {
         @Override
