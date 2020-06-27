@@ -3,6 +3,7 @@ package com.example.sensorsreader;
 import org.eclipse.leshan.client.resource.BaseInstanceEnabler;
 import org.eclipse.leshan.client.servers.ServerIdentity;
 import org.eclipse.leshan.core.response.ExecuteResponse;
+import org.eclipse.leshan.core.response.ObserveResponse;
 import org.eclipse.leshan.core.response.ReadResponse;
 
 
@@ -33,6 +34,14 @@ public class PresenceSensor extends BaseInstanceEnabler {
                 return ExecuteResponse.success();
         }
         return ExecuteResponse.notFound();
+    }
+
+    @Override
+    public ObserveResponse observe(ServerIdentity identity, int resourceid) {
+        // Perform a read by default
+        ReadResponse readResponse = this.read(identity, resourceid);
+        return new ObserveResponse(readResponse.getCode(), readResponse.getContent(), null, null,
+                readResponse.getErrorMessage());
     }
 
 

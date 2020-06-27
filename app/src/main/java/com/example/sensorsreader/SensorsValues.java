@@ -26,7 +26,9 @@ public class SensorsValues {
     }
 
     public static void updatePresence_counter() {
-        SensorsValues.presence_counter +=1;
+        if(!SensorsValues.presence_state) {
+            SensorsValues.presence_counter +=1;
+        }
     }
 
     public static void resetPresence_counter() {
