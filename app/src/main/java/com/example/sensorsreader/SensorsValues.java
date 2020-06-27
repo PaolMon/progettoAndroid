@@ -1,13 +1,35 @@
 package com.example.sensorsreader;
 
 public class SensorsValues {
-    static float temperature_value = 0;
+    static float illuminance_value = 0;
+    static boolean presence_state= false;
+    static int presence_counter =0;
 
-    static void setTemperatureValue(float x) {
-        temperature_value = x;
+    static void setIlluminanceValue(float x) {
+        SensorsValues.illuminance_value = x;
     }
 
-    static float getTemperatureValue() {
-        return temperature_value;
+    static float getIlluminanceValue() {
+        return SensorsValues.illuminance_value;
+    }
+
+    public static boolean isPresence_state() {
+        return presence_state;
+    }
+
+    public static void setPresence_state(boolean presence_state) {
+        SensorsValues.presence_state = presence_state;
+    }
+
+    public static int getPresence_counter() {
+        return presence_counter;
+    }
+
+    public static void updatePresence_counter() {
+        SensorsValues.presence_counter +=1;
+    }
+
+    public static void resetPresence_counter() {
+        SensorsValues.presence_counter = 0;
     }
 }

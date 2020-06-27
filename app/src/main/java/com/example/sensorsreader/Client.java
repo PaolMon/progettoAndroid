@@ -29,13 +29,16 @@ public class Client {
     private static final Logger LOG = LoggerFactory.getLogger(Client.class);
     static final int ILLUMINANCE = 3301;
     static final String ILLUMINANCE_MODEL = "3301.xml";
+    static final int PRESENCE= 3302;
+    static final String PRESENCE_MODEL = "3302.xml";
+
 
 //    private static MyLocation locationInstance;
 
     public static void init(final String[] args, Context ctx) {
         // Set endpoint name
         String endpoint;
-        endpoint = "Paolo."+Build.DEVICE + "-" + Build.ID;
+        endpoint = "Angela_client";
         LOG.info("ENDPOINT: "+endpoint);
 
         // Get server URI
@@ -50,10 +53,15 @@ public class Client {
             List<ObjectModel> models = new ArrayList<>();
             models.addAll(modelDefault);
 
-            final InputStream is = ctx.getResources().getAssets().open(ILLUMINANCE_MODEL);
+            InputStream is = ctx.getResources().getAssets().open(ILLUMINANCE_MODEL);
             List<ObjectModel> my_custom_model = ObjectLoader.loadDdfFile(is, ILLUMINANCE_MODEL);
             models.addAll(my_custom_model);
             LOG.info("Loading model " + ILLUMINANCE_MODEL+" "+models.size());
+
+            is = ctx.getResources().getAssets().open(PRESENCE_MODEL);
+            my_custom_model = ObjectLoader.loadDdfFile(is, PRESENCE_MODEL);
+            models.addAll(my_custom_model);
+            LOG.info("Loading model " + PRESENCE_MODEL+" "+models.size());
 
             final LwM2mModel model = new StaticModel(models);
 
@@ -63,6 +71,7 @@ public class Client {
 
             initializer.setInstancesForObject(DEVICE, new MyDevice());
             initializer.setInstancesForObject(ILLUMINANCE, new LightSensor());
+            initializer.setInstancesForObject(PRESENCE, new PresenceSensor());
 
             LeshanClientBuilder builder = new LeshanClientBuilder(endpoint);
             builder.setLocalAddress("0.0.0.0",0);

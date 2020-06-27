@@ -28,7 +28,7 @@ public class LightSensor extends BaseInstanceEnabler {
     public ReadResponse read(ServerIdentity identity, int resourceid) {
         switch (resourceid) {
             case SENSOR_VALUE:
-                setSensorValue(SensorsValues.getTemperatureValue());
+                setSensorValue(SensorsValues.getIlluminanceValue());
                 return ReadResponse.success(resourceid, actual_value);
             case MIN_MEASURED_VALUE:
                 return ReadResponse.success(resourceid, min_value);
